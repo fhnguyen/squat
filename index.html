@@ -79,11 +79,32 @@
   #rl .kv span:last-child{font-family:var(--mono);font-size:14px;font-weight:700}
   #rl .foot{margin-top:20px;padding-top:13px;border-top:1px solid var(--line)}
   #rl .note{margin-top:11px;font-size:10.5px;color:var(--dim);line-height:1.5}
+  #rl .sc{background:var(--panel);border:1px solid var(--line);border-radius:11px;
+    padding:11px 12px;margin-bottom:9px}
+  #rl .sc.done{border-color:var(--line);opacity:.72}
+  #rl .sch{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+  #rl .scn{font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:.04em}
+  #rl .scl{display:flex;align-items:center;gap:5px}
+  #rl .scl input{width:66px;padding:6px 4px;font-size:16px;border-radius:6px}
+  #rl .scl b{font-size:11px;color:var(--dim);font-weight:400}
+  #rl .rr{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+  #rl .rn{width:24px;height:34px;border-radius:6px;background:var(--ink);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono);
+    font-size:12px;font-weight:700;color:var(--dim);flex:none}
+  #rl .rr input{padding:8px 4px;font-size:17px;border-radius:6px}
+  #rl .rr .iv{flex:1.15} #rl .rr .ir{flex:1} #rl .rr .ix{flex:.8}
+  #rl .rmeta{font-family:var(--mono);font-size:10px;color:var(--dim);min-width:44px;
+    text-align:right;flex:none}
+  #rl .addrep{background:none;border:1px dashed var(--line);color:var(--dim);
+    padding:7px;font-size:11px;text-transform:none;letter-spacing:0;margin-top:2px}
   #rl .plan{background:var(--panel);border:1px solid var(--steel);border-radius:10px;
     padding:11px 13px;margin-bottom:11px}
   #rl .plan .pw{font-size:10px;letter-spacing:.13em;color:var(--steel);text-transform:uppercase;font-weight:700}
   #rl .plan .pn{font-size:14px;font-weight:700;margin:4px 0 5px}
   #rl .plan .px{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.45}
+  #rl .plan .pc{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);
+    font-size:12.5px;line-height:1.5;color:var(--text)}
+  #rl .plan.key .pc{border-top-color:rgba(232,163,61,.35)}
   #rl .plan.key{border-color:var(--amber)}
   #rl .plan.key .pw{color:var(--amber)}
   #rl .plan.none{border-color:var(--line)}
@@ -161,41 +182,18 @@
   <!-- LOGGING -->
   <div id="pLog" style="display:none">
     <div id="planCard" class="plan" style="display:none"></div>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
-        <span class="lbl">Set <span id="setNo">1</span> load</span>
-        <span class="meta" id="loadMeta"></span>
-      </div>
-      <div class="step">
-        <button class="ghost" onclick="bump(-5)">−</button>
-        <div class="loadnum" id="loadNum">215</div>
-        <button class="ghost" onclick="bump(5)">+</button>
-      </div>
-      <button class="steel" id="newSetBtn" style="margin-top:10px;display:none" onclick="newSet()"></button>
-      <label class="chk" style="margin:10px 0 0"><input type="checkbox" id="topset" onchange="setTop()"> Top single &mdash; judge against her limit, not the trend</label>
-    </div>
-
-    <div class="row" style="margin-bottom:10px">
-      <div class="fld"><span class="lbl">Velocity</span>
-        <input id="v" inputmode="decimal" placeholder="0.46"></div>
-      <div class="fld"><span class="lbl">ROM in</span>
-        <input id="rom" inputmode="decimal" placeholder="29.0"></div>
-      <div class="fld"><span class="lbl">Peak</span>
-        <input id="pk" inputmode="decimal" placeholder="—"></div>
-      <div class="fld"><span class="lbl">EAI</span>
-        <input id="eai" inputmode="decimal" placeholder="—"></div>
-    </div>
-    <div class="row" style="margin-bottom:13px">
-      <button class="primary" onclick="logRep()">Log rep</button>
-      <button class="ghost" style="width:96px" onclick="undo()">Undo</button>
-    </div>
 
     <div id="depthWarn" class="warn" style="display:none;border:1px solid var(--red)">
       <strong style="color:var(--red)">Two depth flags this session.</strong>
       End the top-end work — the position is going.
     </div>
 
-    <div id="sets"></div>
+    <div id="grid"></div>
+
+    <div class="row" style="margin-top:6px">
+      <button class="ghost" onclick="addSet()">+ Add a set</button>
+      <button class="ghost" style="width:96px" onclick="resetGrid()">Reset</button>
+    </div>
   </div>
 
   <!-- SUMMARY -->
@@ -263,6 +261,27 @@
         <p class="warnP">Her MVT is bounded at <b>0.20 or less</b> — she completed a 235 single at 0.20 on Jul&nbsp;20. She is <b>not</b> fragile at 0.30. The risk with her runs the other way: she will keep grinding at 0.22.</p>
       </div>
 
+
+      <button class="accH" onclick="tog(this)">Her first working set is always slow<i>+</i></button>
+      <div class="accB">
+        <p>Four sessions, both lifts, same shape — she potentiates <b>into</b> a session rather than fatiguing across it.</p>
+        <table>
+          <tr><td>Aug 21 BS</td><td>set 1 <b>0.600</b> → best 0.683 &nbsp;·&nbsp; <b>+13.8%</b></td></tr>
+          <tr><td>Aug 24 BS</td><td>set 1 <b>0.570</b> → best 0.600 &nbsp;·&nbsp; +5.3%</td></tr>
+          <tr><td>Jul 31 FS</td><td>set 1 <b>0.513</b> → best 0.540 &nbsp;·&nbsp; +5.3%</td></tr>
+          <tr><td>Aug 22 FS</td><td>set 1 <b>0.680</b> → best 0.700 &nbsp;·&nbsp; +2.9%</td></tr>
+        </table>
+        <p><b>The fix:</b> one potentiation double at roughly working weight, or a single ~10% above it, three minutes before set 1.</p>
+        <p class="warnP"><b>Data consequence.</b> Set 1 is not a clean reading for her. On <b>Mon 9/7</b> do not judge the max off the first cluster single — rep 1 of set 2 or 3 is the honest number.</p>
+      </div>
+
+      <button class="accH" onclick="tog(this)">The readiness check has been validated<i>+</i></button>
+      <div class="accB">
+        <p>Aug 21, first session back after the qualifier and four days off: <b>185 read 0.52</b> against a 0.58 baseline — a 0.06 deficit, flagged DOWN A BIT.</p>
+        <p>The session confirmed it independently. At 155 the trend predicts <b>0.70</b>; her sets ran 0.60-0.71. Add the 0.06 back and the session lands at 0.66-0.74 — straddling trend.</p>
+        <p>It predicted the <b>size</b> of the suppression, not just its direction. Three days later she read <b>0.61</b> — up 0.09, recovery visible as a number.</p>
+      </div>
+
       <button class="accH" onclick="tog(this)">The backoff check — do not skip it<i>+</i></button>
       <div class="accB">
         <p>After the top work, go back to <b>185 for one light double</b>. If it reads near <b>0.58</b>, the heavy rep reflected LOAD and not fatigue — the reading is trustworthy. If it comes in slow, she was more tired than the top set suggested and the heavy number understates her.</p>
@@ -316,6 +335,8 @@
 
   <div class="foot">
     <div class="row">
+      <div class="fld"><span class="lbl">Session date</span>
+        <input id="sdate" type="date" style="font-size:14px;padding:11px 6px" onchange="dateChanged()"></div>
       <div class="fld"><span class="lbl">Lift</span>
         <select id="lift" onchange="setLift()">
           <option value="bs">Back squat</option>
@@ -364,32 +385,57 @@ window.addEventListener("resize",reportH);
 
 /* ---------- the block: date -> session ---------- */
 var PLAN={
- "2026-08-21":{w:0,n:"Day 1 — BS light",l:"bs",load:155,rx:"5x3 @ 60% (155), max intent, rest 90s"},
- "2026-08-22":{w:0,n:"FS light",l:"fs",load:140,rx:"3x3 @ 60% (140), rest 90s"},
- "2026-08-24":{w:1,n:"BS tempo",l:"bs",load:180,rx:"4x3 @ 70% (180), 4-sec eccentric, rest 2-3 min"},
- "2026-08-28":{w:1,n:"BS speed",l:"bs",load:160,rx:"6x3 @ 62% (160) CAT, rest 90s"},
- "2026-08-29":{w:1,n:"FS main",l:"fs",load:150,rx:"4x4 @ 65% (150), rest 2 min"},
- "2026-08-31":{w:2,n:"BS tempo → moderate",l:"bs",load:190,rx:"3x3 @ 74% (190) then 3x2 @ 80% (210), 3-sec ecc"},
- "2026-09-04":{w:2,n:"BS speed",l:"bs",load:175,rx:"5x3 @ 68% (175) CAT, rest 90s"},
- "2026-09-05":{w:2,n:"FS main",l:"fs",load:170,rx:"4x3 @ 74% (170), rest 2-3 min"},
- "2026-09-07":{w:3,n:"BS CLUSTERS — confirms the max",l:"bs",load:225,key:1,
-   rx:"5x1 @ 86% (225), 3-sec ecc, 45-60s between · BACKOFF 1x2 @ 185"},
- "2026-09-11":{w:3,n:"BS tempo",l:"bs",load:190,rx:"4x3 @ 74% (190), 4-sec eccentric"},
- "2026-09-12":{w:3,n:"FS main",l:"fs",load:175,rx:"4x3 @ 77% (175), rest 2-3 min"},
- "2026-09-14":{w:4,n:"BS clusters",l:"bs",load:230,rx:"5x1 @ 88% (230), 3-sec ecc · BACKOFF 1x2 @ 185"},
- "2026-09-18":{w:4,n:"BS tempo",l:"bs",load:205,rx:"4x2 @ 78% (205), 3-sec eccentric, rest 3 min"},
- "2026-09-19":{w:4,n:"FS main",l:"fs",load:190,rx:"3x3 @ 83% (190), rest 3 min"},
- "2026-09-21":{w:5,n:"BS clusters — sets MVT",l:"bs",load:240,key:1,top:1,
-   rx:"4x1 @ 92% (240), 2-3 sec ecc, 60-75s between · BACKOFF 1x2 @ 185"},
- "2026-09-25":{w:5,n:"BS moderate",l:"bs",load:210,rx:"3x2 @ 80% (210), controlled ecc, rest 3 min"},
- "2026-09-26":{w:5,n:"FS main",l:"fs",load:195,rx:"3x2 @ 85% (195), rest 3 min"},
- "2026-09-28":{w:6,n:"BS PEAK — heaviest week",l:"bs",load:250,key:1,top:1,
-   rx:"Build to 1x1 @ 96% (250), 5+ min between · BACKOFF 2x2 @ 205"},
- "2026-10-02":{w:6,n:"BS light — taper starts",l:"bs",load:180,rx:"3x2 @ 70% (180), max intent, rest 2 min"},
- "2026-10-03":{w:6,n:"FS light",l:"fs",load:185,rx:"2x2 @ 80% (185), rest 2-3 min"},
- "2026-10-05":{w:7,n:"FINAL TUNE-UP",l:"bs",load:215,rx:"1-2 singles @ 82-85% (215-220) · then FS 1-2 @ 180"}
+ "2026-08-21":{c:"First session back after the qualifier and 4 days off. Expect the readiness rep to be down — that is fine and the plan does not change. Speed, not load.",w:0,n:"Day 1 — BS light",l:"bs",rx:"5x3 @ 60% (155), max intent, rest 90s",
+   sets:[[155,3],[155,3],[155,3],[155,3],[155,3]]},
+ "2026-08-22":{c:"Easy. Her front squat is the comfortable lift and the pattern reference — leave it alone and let it feel good.",w:0,n:"FS light",l:"fs",rx:"3x3 @ 60% (140), rest 90s",
+   sets:[[140,3],[140,3],[140,3]]},
+ "2026-08-24":{c:"4-sec eccentric on every rep, normal concentric. The descent is where the fault was. Add a potentiation double before set 1 — her first working set runs 5-14% slow every session.",w:1,n:"BS tempo",l:"bs",rx:"4x3 @ 70% (180), 4-sec eccentric, rest 2-3 min",
+   sets:[[180,3],[180,3],[180,3],[180,3]]},
+ "2026-08-28":{c:"Speed day. Drive the bar. Watch for a MINIMUM here, not a drop — below trend means she is not driving, which is a cue, not fatigue.",w:1,n:"BS speed",l:"bs",rx:"6x3 @ 62% (160) CAT, rest 90s",
+   sets:[[160,3],[160,3],[160,3],[160,3],[160,3],[160,3]]},
+ "2026-08-29":{c:"Real FS training now, not a primer. Loads carry on from where Aug 7 left off.",w:1,n:"FS main",l:"fs",rx:"4x4 @ 65% (150), rest 2 min",
+   sets:[[150,4],[150,4],[150,4],[150,4]]},
+ "2026-08-31":{c:"First moderate-heavy exposure. 3-sec eccentric. Compare the ROM spread to last week — tightening means the pattern is consolidating.",w:2,n:"BS tempo → moderate",l:"bs",rx:"3x3 @ 74% (190) then 3x2 @ 80% (210), 3-sec ecc",
+   sets:[[190,3],[190,3],[190,3],[210,2],[210,2],[210,2]]},
+ "2026-09-04":{c:"Speed day. Same minimum logic as 8/28.",w:2,n:"BS speed",l:"bs",rx:"5x3 @ 68% (175) CAT, rest 90s",
+   sets:[[175,3],[175,3],[175,3],[175,3],[175,3]]},
+ "2026-09-05":{c:"Straightforward FS volume.",w:2,n:"FS main",l:"fs",rx:"4x3 @ 74% (170), rest 2-3 min",
+   sets:[[170,3],[170,3],[170,3],[170,3]]},
+ "2026-09-07":{c:"THE session that settles the max. Five fresh singles at 225. IGNORE set 1 — her first working set is systematically slow. Judge off rep 1 of set 2 or 3. If that reads 0.42+, 260 is right or conservative; below 0.38, recalculate Wk 4-6. Do the 185 backoff — it proves the reading was load and not fatigue.",w:3,n:"BS CLUSTERS — confirms the max",l:"bs",key:1,
+   rx:"5x1 @ 86% (225), 3-sec ecc, 45-60s between · BACKOFF 1x2 @ 185",
+   sets:[[225,1],[225,1],[225,1],[225,1],[225,1],[185,2]]},
+ "2026-09-11":{c:"Back to volume and descent control. 4-sec eccentric.",w:3,n:"BS tempo",l:"bs",rx:"4x3 @ 74% (190), 4-sec eccentric",
+   sets:[[190,3],[190,3],[190,3],[190,3]]},
+ "2026-09-12":{c:"Standard FS volume.",w:3,n:"FS main",l:"fs",rx:"4x3 @ 77% (175), rest 2-3 min",
+   sets:[[175,3],[175,3],[175,3],[175,3]]},
+ "2026-09-14":{c:"Same format as 9/7, 5 lb up. Watch decay across the five singles — flat means she is tolerating it, steadily declining means it is past what full rest restores.",w:4,n:"BS clusters",l:"bs",rx:"5x1 @ 88% (230), 3-sec ecc · BACKOFF 1x2 @ 185",
+   sets:[[230,1],[230,1],[230,1],[230,1],[230,1],[185,2]]},
+ "2026-09-18":{c:"Doubles now, not triples. 3-sec eccentric.",w:4,n:"BS tempo",l:"bs",rx:"4x2 @ 78% (205), 3-sec eccentric, rest 3 min",
+   sets:[[205,2],[205,2],[205,2],[205,2]]},
+ "2026-09-19":{c:"Heaviest FS volume of the block.",w:4,n:"FS main",l:"fs",rx:"3x3 @ 83% (190), rest 3 min",
+   sets:[[190,3],[190,3],[190,3]]},
+ "2026-09-21":{c:"Sets the MVT for the peak. Tick TOP on the 240 sets. Tempo shortens to 2-3 sec — control, not a count. LOG CYCLE PHASE; if she is suppressed this week the number is not her ceiling, and it is better to move the session than accept a bad reading.",w:5,n:"BS clusters — sets MVT",l:"bs",key:1,top:1,
+   rx:"4x1 @ 92% (240), 2-3 sec ecc, 60-75s between · BACKOFF 1x2 @ 185",
+   sets:[[240,1],[240,1],[240,1],[240,1],[185,2]]},
+ "2026-09-25":{c:"Volume is clearly secondary now. Controlled eccentric, no count.",w:5,n:"BS moderate",l:"bs",rx:"3x2 @ 80% (210), controlled ecc, rest 3 min",
+   sets:[[210,2],[210,2],[210,2]]},
+ "2026-09-26":{c:"FS staying sharp, not building.",w:5,n:"FS main",l:"fs",rx:"3x2 @ 85% (195), rest 3 min",
+   sets:[[195,2],[195,2],[195,2]]},
+ "2026-09-28":{c:"Heaviest lift of the block, 11 days out. Build 225 → 240 → 250, TOP ticked on the 250. Go to 255 ONLY if 250 reads 0.33+ AND the ROM held. This is a CrossFit competition — she needs to arrive fresh, not maximally strong. Bank a clean 250 and taper.",w:6,n:"BS PEAK — heaviest week",l:"bs",key:1,top:1,
+   rx:"Build to 1x1 @ 96% (250), 5+ min between · BACKOFF 2x2 @ 205",
+   sets:[[225,1],[240,1],[250,1],[205,2],[205,2]]},
+ "2026-10-02":{c:"Taper starts. Fast and crisp, nothing heavy. Should read clearly faster than Monday.",w:6,n:"BS light — taper starts",l:"bs",rx:"3x2 @ 70% (180), max intent, rest 2 min",
+   sets:[[180,2],[180,2],[180,2]]},
+ "2026-10-03":{c:"Short. Nothing to prove.",w:6,n:"FS light",l:"fs",rx:"2x2 @ 80% (185), rest 2-3 min",
+   sets:[[185,2],[185,2]]},
+ "2026-10-05":{c:"A touch, not a test. Stop at the first rep that looks and feels sharp — 215 should read ~0.46 or better. Then three full days off. Trim conditioning too, or the squat taper does nothing.",w:7,n:"FINAL TUNE-UP",l:"bs",rx:"1-2 singles @ 82-85% (215-220) · then FS 1-2 @ 180",
+   sets:[[215,1],[220,1]]}
 };
-function isoToday(){ var d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10); }
+function realToday(){ var d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10); }
+function isoToday(){
+  var el=document.getElementById("sdate");
+  return (el && el.value) ? el.value : realToday();
+}
 function todaysPlan(){ return PLAN[isoToday()]||null; }
 
 /* ---------- model ---------- */
@@ -461,7 +507,8 @@ function paintPlan(){
   }
   el.className="plan"+(p.key?" key":"");
   el.innerHTML='<div class="pw">Week '+p.w+' · '+isoToday()+(p.key?' · KEY SESSION':'')+'</div>'+
-    '<div class="pn">'+p.n+'</div><div class="px">'+p.rx+'</div>';
+    '<div class="pn">'+p.n+'</div><div class="px">'+p.rx+'</div>'+
+    (p.c?'<div class="pc">'+p.c+'</div>':'');
 }
 
 /* ---------- verdict ---------- */
@@ -490,6 +537,100 @@ function judge(L,v,rom,prior,forceTop){
 }
 var TONE={green:"var(--green)",amber:"var(--amber)",red:"var(--red)",steel:"var(--steel)"};
 
+
+/* ---------- prebuilt grid ---------- */
+function blankRep(){ return {v:null,rom:null,pk:null,eai:null}; }
+function buildFromPlan(force){
+  var p=todaysPlan();
+  if(!force && S.sets.some(function(s){return s.reps.some(function(r){return r.v;});})) return;
+  S.sets=[];
+  if(p && p.sets){
+    p.sets.forEach(function(pair){
+      var reps=[]; for(var i=0;i<pair[1];i++) reps.push(blankRep());
+      S.sets.push({load:pair[0],reps:reps,top:!!p.top,planned:true});
+    });
+  } else {
+    S.sets.push({load:S.load,reps:[blankRep(),blankRep(),blankRep()],top:false});
+  }
+  drawGrid();
+}
+function addSet(){
+  var last=S.sets[S.sets.length-1];
+  var n=last?last.reps.length:3, load=last?last.load:S.load, reps=[];
+  for(var i=0;i<n;i++) reps.push(blankRep());
+  S.sets.push({load:load,reps:reps,top:last?last.top:false});
+  drawGrid(); stash();
+}
+function addRep(si){ S.sets[si].reps.push(blankRep()); drawGrid(); stash(); }
+function resetGrid(){
+  if(!confirm("Clear everything logged in this session?")) return;
+  buildFromPlan(true); paintLight(0,null); stash();
+}
+function setLoad(si,val){
+  var n=parseFloat(val); if(!n) return;
+  S.sets[si].load=n; recolorSet(si); stash();
+}
+function setField(si,ri,f,val){
+  var n=parseFloat(val);
+  S.sets[si].reps[ri][f]= isNaN(n)?null:n;
+  recolorSet(si);
+  if(f==="v" && !isNaN(n)){
+    var prior=S.sets[si].reps.slice(0,ri).filter(function(r){return r.v;});
+    paintLight(n, judge(S.sets[si].load,n,S.sets[si].reps[ri].rom,prior,S.sets[si].top));
+  }
+  stash();
+  document.getElementById("depthWarn").style.display = romFlags()>=2 ? "block":"none";
+}
+function toggleTop(si,on){ S.sets[si].top=on; recolorSet(si); stash(); }
+function recolorSet(si){
+  var s=S.sets[si];
+  s.reps.forEach(function(r,ri){
+    var el=document.getElementById("rn"+si+"_"+ri);
+    var mt=document.getElementById("rm"+si+"_"+ri);
+    if(!el) return;
+    if(r.v==null){ el.style.background=""; el.style.color="var(--dim)";
+      el.style.borderColor="var(--line)"; if(mt) mt.textContent=""; return; }
+    var prior=s.reps.slice(0,ri).filter(function(x){return x.v;});
+    var j=judge(s.load,r.v,r.rom,prior,s.top);
+    el.style.background=TONE[j.tone]; el.style.color="var(--ink)"; el.style.borderColor="transparent";
+    if(mt){
+      var fast=prior.length?Math.max.apply(null,prior.map(function(x){return x.v;})):r.v;
+      var loss=prior.length?Math.round((fast-r.v)/fast*100):0;
+      mt.textContent = prior.length ? (loss>0?"-"+loss+"%":"0%") : "";
+    }
+  });
+  var card=document.getElementById("sc"+si);
+  if(card) card.className="sc"+(s.reps.every(function(r){return r.v;})?" done":"");
+}
+function drawGrid(){
+  var g=document.getElementById("grid"); if(!g) return;
+  var html="";
+  S.sets.forEach(function(s,si){
+    html+='<div class="sc" id="sc'+si+'"><div class="sch">'+
+      '<span class="scn">SET '+(si+1)+'</span><span class="scl">'+
+      '<input type="number" inputmode="numeric" value="'+s.load+'" '+
+      'oninput="setLoad('+si+',this.value)"><b>lb</b>'+
+      '<label style="display:flex;align-items:center;gap:4px;margin-left:6px;font-size:10px;color:var(--dim)">'+
+      '<input type="checkbox" style="width:14px;height:14px;padding:0;accent-color:var(--amber)" '+
+      (s.top?"checked ":"")+'onchange="toggleTop('+si+',this.checked)">top</label>'+
+      '</span></div>';
+    s.reps.forEach(function(r,ri){
+      html+='<div class="rr"><div class="rn" id="rn'+si+'_'+ri+'">'+(ri+1)+'</div>'+
+        '<input class="iv" inputmode="decimal" placeholder="vel" value="'+(r.v==null?"":r.v)+'" '+
+          'oninput="setField('+si+','+ri+',\'v\',this.value)">'+
+        '<input class="ir" inputmode="decimal" placeholder="ROM" value="'+(r.rom==null?"":r.rom)+'" '+
+          'oninput="setField('+si+','+ri+',\'rom\',this.value)">'+
+        '<input class="ix" inputmode="decimal" placeholder="pk" value="'+(r.pk==null?"":r.pk)+'" '+
+          'oninput="setField('+si+','+ri+',\'pk\',this.value)">'+
+        '<span class="rmeta" id="rm'+si+'_'+ri+'"></span></div>';
+    });
+    html+='<button class="addrep" onclick="addRep('+si+')">+ rep</button></div>';
+  });
+  g.innerHTML=html;
+  S.sets.forEach(function(_,si){ recolorSet(si); });
+  setTimeout(reportH,0);
+}
+
 /* ---------- render ---------- */
 function paintLight(v,j){
   var el=document.getElementById("light");
@@ -506,40 +647,7 @@ function paintLight(v,j){
 function render(){
   document.getElementById("meta").textContent =
     (S.lift==="bs"?"BACK":"FRONT")+" · MAX "+oneRM();
-  document.getElementById("loadNum").textContent = S.load;
-  document.getElementById("setNo").textContent = Math.max(1,S.sets.length);
-  document.getElementById("refLoadLbl").textContent = S.refLoad;
-  var c=cur();
-  document.getElementById("loadMeta").textContent = c
-    ? Math.round(c.load/oneRM()*100)+"% · target "+predict(c.load).toFixed(2) : "";
-  var nb=document.getElementById("newSetBtn");
-  if(c && c.load!==S.load){ nb.style.display="block"; nb.textContent="New set at "+S.load; }
-  else nb.style.display="none";
-
-  var tc=document.getElementById("topset"); if(tc&&c) tc.checked=!!c.top;
   document.getElementById("depthWarn").style.display = romFlags()>=2 ? "block":"none";
-
-  var html="";
-  S.sets.forEach(function(st,i){
-    var vs=st.reps.map(function(r){return r.v;});
-    var drop = vs.length>1 ? " · −"+Math.round((Math.max.apply(null,vs)-Math.min.apply(null,vs))/Math.max.apply(null,vs)*100)+"%" : "";
-    html+='<div class="card"><div class="setline">'+
-      '<span style="font-family:var(--mono);font-size:13px;font-weight:700">SET '+(i+1)+' · '+st.load+' lb</span>'+
-      '<span class="meta">'+st.reps.length+' rep'+(st.reps.length===1?"":"s")+drop+'</span></div><div class="pills">';
-    st.reps.forEach(function(r,j){
-      var jj=judge(st.load,r.v,r.rom,st.reps.slice(0,j),st.top);
-      html+='<div class="pill" style="background:'+TONE[jj.tone]+'">'+r.v.toFixed(2)+
-        (r.rom?'<small> '+r.rom.toFixed(1)+'"</small>':'')+'</div>';
-    });
-    html+='</div></div>';
-  });
-  document.getElementById("sets").innerHTML=html;
-
-  if(c && c.reps.length){
-    var last=c.reps[c.reps.length-1];
-    paintLight(last.v, judge(c.load,last.v,last.rom,c.reps.slice(0,-1),c.top));
-  } else if(S.phase==="log"){ paintLight(0,null); }
-
   renderHist();
   setTimeout(reportH,0);
 }
@@ -591,7 +699,7 @@ function go(p){
   });
   document.getElementById("light").style.display = (p==="ref")?"none":"block";
   paintIntent();
-  if(p==="log"){ paintPlan(); if(!S.sets.length) newSet(); }
+  if(p==="log"){ paintPlan(); if(!S.sets.length) buildFromPlan(false); else drawGrid(); }
   if(p==="done") buildOut();
   if(p==="ready" && S.ready) paintLight(S.ready.v,S.ready);
   render();
@@ -608,28 +716,11 @@ function checkReady(){
   S.ready={v:v,d:d,tone:tone,head:head,sub:sub};
   paintLight(v,S.ready); save();
 }
-function bump(n){ S.load=Math.max(45,S.load+n); render(); }
-function newSet(){ S.sets.push({load:S.load,reps:[],top:false}); stash();
-  document.getElementById("topset").checked=false; focusV(); render(); }
-function focusV(){ var e=document.getElementById("v"); if(e){e.value="";e.focus();} 
-  document.getElementById("rom").value=""; document.getElementById("eai").value="";
-  var p=document.getElementById("pk"); if(p) p.value=""; }
-function logRep(){
-  var c=cur(); if(!c) return;
-  var v=parseFloat(document.getElementById("v").value); if(!v) return;
-  var rom=parseFloat(document.getElementById("rom").value)||null;
-  var eai=parseFloat(document.getElementById("eai").value)||null;
-  var pk=parseFloat(document.getElementById("pk").value)||null;
-  c.reps.push({v:v,rom:rom,eai:eai,pk:pk});
-  stash();
-  focusV(); render();
+function dateChanged(){
+  var p=todaysPlan(), dirty=S.sets.some(function(s){return s.reps.some(function(r){return r.v;});});
+  if(p && !dirty){ S.lift=p.l; document.getElementById("lift").value=S.lift; buildFromPlan(true); }
+  paintPlan(); render();
 }
-function undo(){
-  var c=cur(); if(!c) return;
-  if(c.reps.length) c.reps.pop(); else S.sets.pop();
-  stash(); render();
-}
-function setTop(){ var c=cur(); if(c) c.top=document.getElementById("topset").checked; render(); }
 function setLift(){
   S.lift=document.getElementById("lift").value;
   render();
@@ -640,6 +731,7 @@ function buildOut(){
   if(S.ready) L.push("Readiness @"+S.refLoad+": "+S.ready.v.toFixed(2)+" ("+(S.ready.d>=0?"+":"")+S.ready.d.toFixed(2)+") — "+S.ready.head);
   if(document.getElementById("mens").checked) L.push("Cycle phase: menstrual");
   S.sets.forEach(function(st,i){
+    st={load:st.load,top:st.top,reps:st.reps.filter(function(r){return r.v;})};
     if(!st.reps.length) return;
     L.push("Set "+(i+1)+"  "+st.load+" lb x"+st.reps.length+(st.top?" [top]":"")+"  "+
       st.reps.map(function(r){
@@ -648,7 +740,7 @@ function buildOut(){
   });
   document.getElementById("out").value=L.join("\n");
 
-  var all=[].concat.apply([],S.sets.map(function(s){return s.reps;}));
+  var all=[].concat.apply([],S.sets.map(function(s){return s.reps.filter(function(r){return r.v;});}));
   var roms=all.filter(function(r){return r.rom;}).map(function(r){return r.rom;});
   var spread = roms.length>1 ? (Math.max.apply(null,roms)-Math.min.apply(null,roms)).toFixed(1)+" in" : "—";
   var kv=[["Sets",S.sets.filter(function(s){return s.reps.length;}).length],
@@ -665,7 +757,7 @@ function copyOut(){
     setTimeout(function(){document.getElementById("copyBtn").textContent="Copy";},1600); }catch(e){}
 }
 function saveSession(){
-  var all=[].concat.apply([],S.sets.map(function(s){return s.reps;}));
+  var all=[].concat.apply([],S.sets.map(function(s){return s.reps.filter(function(r){return r.v;});}));
   if(!all.length){ document.getElementById("saveNote").textContent="Nothing logged yet."; return; }
   var p=todaysPlan(), d=isoToday();
   HIST=HIST.filter(function(x){ return !(x.date===d && x.lift===S.lift); });
@@ -673,7 +765,8 @@ function saveSession(){
     date:d, lift:S.lift, week:p?p.w:"", name:p?p.n:"unscheduled",
     phase:document.getElementById("mens").checked?"menstrual":"",
     ready:S.ready?{v:S.ready.v,d:S.ready.d,head:S.ready.head}:null,
-    sets:S.sets.filter(function(s){return s.reps.length;}),
+    sets:S.sets.map(function(s){return {load:s.load,top:s.top,reps:s.reps.filter(function(r){return r.v;})};})
+           .filter(function(s){return s.reps.length;}),
     top:Math.max.apply(null,S.sets.map(function(s){return s.load;})),
     best:Math.max.apply(null,all.map(function(r){return r.v;})),
     text:document.getElementById("out").value
@@ -736,8 +829,6 @@ document.getElementById("bl").addEventListener("input",function(e){S.baseline=pa
 document.getElementById("mens").addEventListener("change",function(e){
   document.getElementById("mensWarn").style.display=e.target.checked?"block":"none";
 });
-["v","rom","eai"].forEach(function(id){
-  document.getElementById(id).addEventListener("keydown",function(e){ if(e.key==="Enter") logRep(); });
 });
 document.getElementById("rv").addEventListener("keydown",function(e){ if(e.key==="Enter") checkReady(); });
 
@@ -746,6 +837,7 @@ document.getElementById("rv").addEventListener("keydown",function(e){ if(e.key==
   var resumed=unstash();
   var p=todaysPlan();
   if(!resumed && p){ S.lift=p.l; S.load=p.load; }
+  var sd=document.getElementById("sdate"); if(sd&&!sd.value) sd.value=realToday();
   document.getElementById("lift").value=S.lift;
   if(resumed){
     document.getElementById("saveNote").textContent="";
@@ -760,6 +852,7 @@ document.getElementById("rv").addEventListener("keydown",function(e){ if(e.key==
 })();
 paintIntent();
 paintPlan();
+buildFromPlan(false);
 render();
 setTimeout(reportH,60);
 </script>
