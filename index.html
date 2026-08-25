@@ -726,7 +726,7 @@ function setLift(){
   render();
 }
 function buildOut(){
-  var d=new Date().toISOString().slice(0,10);
+  var d=isoToday();
   var L=[d+"  "+(S.lift==="bs"?"Back Squat":"Front Squat")+"  (max "+oneRM()+")"];
   if(S.ready) L.push("Readiness @"+S.refLoad+": "+S.ready.v.toFixed(2)+" ("+(S.ready.d>=0?"+":"")+S.ready.d.toFixed(2)+") — "+S.ready.head);
   if(document.getElementById("mens").checked) L.push("Cycle phase: menstrual");
@@ -743,7 +743,7 @@ function buildOut(){
   var all=[].concat.apply([],S.sets.map(function(s){return s.reps.filter(function(r){return r.v;});}));
   var roms=all.filter(function(r){return r.rom;}).map(function(r){return r.rom;});
   var spread = roms.length>1 ? (Math.max.apply(null,roms)-Math.min.apply(null,roms)).toFixed(1)+" in" : "—";
-  var kv=[["Sets",S.sets.filter(function(s){return s.reps.length;}).length],
+  var kv=[["Sets",S.sets.filter(function(s){return s.reps.some(function(r){return r.v;});}).length],
           ["Reps",all.length],
           ["Heaviest",(S.sets.length?Math.max.apply(null,S.sets.map(function(s){return s.load;})):0)+" lb"],
           ["ROM spread",spread],
@@ -828,7 +828,6 @@ document.getElementById("maxfs").addEventListener("input",function(e){S.maxfs=pa
 document.getElementById("bl").addEventListener("input",function(e){S.baseline=parseFloat(e.target.value)||0;save();});
 document.getElementById("mens").addEventListener("change",function(e){
   document.getElementById("mensWarn").style.display=e.target.checked?"block":"none";
-});
 });
 document.getElementById("rv").addEventListener("keydown",function(e){ if(e.key==="Enter") checkReady(); });
 
