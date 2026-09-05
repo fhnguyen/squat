@@ -87,6 +87,10 @@
   #rl .scl{display:flex;align-items:center;gap:5px}
   #rl .scl input{width:66px;padding:6px 4px;font-size:16px;border-radius:6px}
   #rl .scl b{font-size:11px;color:var(--dim);font-weight:400}
+  #rl .tmp{background:var(--amber);color:var(--ink);border-radius:4px;padding:2px 6px;
+    font-size:9.5px;font-weight:700;letter-spacing:.04em;margin-left:5px}
+  #rl .tmpn{background:transparent;color:var(--dim);border:1px solid var(--line);border-radius:4px;
+    padding:2px 6px;font-size:9.5px;font-weight:400;letter-spacing:.04em;margin-left:5px}
   #rl .rr{display:flex;align-items:center;gap:7px;margin-bottom:6px}
   #rl .rn{width:24px;height:34px;border-radius:6px;background:var(--ink);border:1px solid var(--line);
     display:flex;align-items:center;justify-content:center;font-family:var(--mono);
@@ -282,6 +286,20 @@
         <p>It predicted the <b>size</b> of the suppression, not just its direction. Three days later she read <b>0.61</b> — up 0.09, recovery visible as a number.</p>
       </div>
 
+
+      <button class="accH" onclick="tog(this)">Tempo changes how to read a set<i>+</i></button>
+      <div class="accB">
+        <p>A slow eccentric roughly <b>doubles per-rep velocity decay</b>. Measured from her own data:</p>
+        <table>
+          <tr><td>Jul 27 · 220 · 85%</td><td>no tempo</td><td>6.5–8.1% per rep</td></tr>
+          <tr><td>Sep 4 · 210 · 81%</td><td>3-sec ecc</td><td><b>13.7–14.9% per rep</b></td></tr>
+        </table>
+        <p><b>The first rep is unaffected.</b> Aug 3 at 215 (no tempo) sat on trend · Aug 24 at 180 (4-sec) was +0.02 · Sep 4 at 210 (3-sec) was +0.03. Tempo doesn't depress the opening rep, it accelerates what follows.</p>
+        <p class="warnP"><b>So on a tempo set, judge rep 1 against trend and treat the decay as expected.</b> The app suspends the normal loss cutoff on tempo sets and keeps a 25% backstop. Sets show an amber <b>Ns ecc</b> badge; untempo'd sets show a grey <b>normal</b> badge.</p>
+        <p>Backoffs and readiness reps are deliberately <b>normal tempo</b> — that keeps them comparable to her untempo'd history, which is what makes the backoff a valid fatigue check.</p>
+        <p><b>Mon 9/28 (peak) is all normal tempo on purpose</b>, so the top single is directly comparable to Aug 3.</p>
+      </div>
+
       <button class="accH" onclick="tog(this)">The backoff check — do not skip it<i>+</i></button>
       <div class="accB">
         <p>After the top work, go back to <b>185 for one light double</b>. If it reads near <b>0.58</b>, the heavy rep reflected LOAD and not fatigue — the reading is trustworthy. If it comes in slow, she was more tired than the top set suggested and the heavy number understates her.</p>
@@ -386,46 +404,46 @@ window.addEventListener("resize",reportH);
 /* ---------- the block: date -> session ---------- */
 var PLAN={
  "2026-08-21":{c:"First session back after the qualifier and 4 days off. Expect the readiness rep to be down — that is fine and the plan does not change. Speed, not load.",w:0,n:"Day 1 — BS light",l:"bs",rx:"5x3 @ 60% (155), max intent, rest 90s",
-   sets:[[155,3],[155,3],[155,3],[155,3],[155,3]]},
+   sets:[[155,3,0],[155,3,0],[155,3,0],[155,3,0],[155,3,0]]},
  "2026-08-22":{c:"Easy. Her front squat is the comfortable lift and the pattern reference — leave it alone and let it feel good.",w:0,n:"FS light",l:"fs",rx:"3x3 @ 60% (140), rest 90s",
-   sets:[[140,3],[140,3],[140,3]]},
+   sets:[[140,3,0],[140,3,0],[140,3,0]]},
  "2026-08-24":{c:"4-sec eccentric on every rep, normal concentric. The descent is where the fault was. Add a potentiation double before set 1 — her first working set runs 5-14% slow every session.",w:1,n:"BS tempo",l:"bs",rx:"4x3 @ 70% (180), 4-sec eccentric, rest 2-3 min",
-   sets:[[180,3],[180,3],[180,3],[180,3]]},
+   sets:[[180,3,4],[180,3,4],[180,3,4],[180,3,4]]},
  "2026-08-28":{c:"Speed day. Drive the bar. Watch for a MINIMUM here, not a drop — below trend means she is not driving, which is a cue, not fatigue.",w:1,n:"BS speed",l:"bs",rx:"6x3 @ 62% (160) CAT, rest 90s",
-   sets:[[160,3],[160,3],[160,3],[160,3],[160,3],[160,3]]},
+   sets:[[160,3,0],[160,3,0],[160,3,0],[160,3,0],[160,3,0],[160,3,0]]},
  "2026-08-29":{c:"Real FS training now, not a primer. Loads carry on from where Aug 7 left off.",w:1,n:"FS main",l:"fs",rx:"4x4 @ 65% (150), rest 2 min",
-   sets:[[150,4],[150,4],[150,4],[150,4]]},
+   sets:[[150,4,0],[150,4,0],[150,4,0],[150,4,0]]},
  "2026-08-31":{c:"First moderate-heavy exposure. 3-sec eccentric. Compare the ROM spread to last week — tightening means the pattern is consolidating.",w:2,n:"BS tempo → moderate",l:"bs",rx:"3x3 @ 74% (190) then 3x2 @ 80% (210), 3-sec ecc",
-   sets:[[190,3],[190,3],[190,3],[210,2],[210,2],[210,2]]},
- "2026-09-04":{c:"Travel week cost the 8/31 session — this replaces it, not the speed work. 3-sec eccentric. Read the readiness rep first: 0.55+ run as written · 0.50-0.54 keep the triples but drop the doubles to 200 · under 0.50 triples only at 180 and skip the top work. She did an unmeasured 4x10 on Tue 9/1, so expect soreness.",w:2,n:"BS moderate — makes up 8/31",l:"bs",rx:"3x3 @ 74% (190) then 3x2 @ 80% (210), 3-sec ecc, rest 3 min",sets:[[190,3],[190,3],[190,3],[210,2],[210,2],[210,2]]},
+   sets:[[190,3,3],[190,3,3],[190,3,3],[210,2,3],[210,2,3],[210,2,3]]},
+ "2026-09-04":{c:"Travel week cost the 8/31 session — this replaces it, not the speed work. 3-sec eccentric. Read the readiness rep first: 0.55+ run as written · 0.50-0.54 keep the triples but drop the doubles to 200 · under 0.50 triples only at 180 and skip the top work. She did an unmeasured 4x10 on Tue 9/1, so expect soreness.",w:2,n:"BS moderate — makes up 8/31",l:"bs",rx:"3x3 @ 74% (190) then 3x2 @ 80% (210), 3-sec ecc, rest 3 min",sets:[[190,3,3],[190,3,3],[190,3,3],[210,2,3],[210,2,3],[210,2,3]]},
  "2026-09-05":{c:"Straightforward FS volume.",w:2,n:"FS main",l:"fs",rx:"4x3 @ 74% (170), rest 2-3 min",
-   sets:[[170,3],[170,3],[170,3],[170,3]]},
- "2026-09-07":{c:"RE-ENTRY to heavy singles, not the confirmation — that moved to 9/14 because travel left her without a measured lift above 180 since Aug 24. Ignore set 1; her first working set runs 5-14% slow. Do the 185 backoff — it proves the reading was load and not fatigue. If these move well, 9/14 goes to 225-230.",w:3,n:"BS clusters — re-entry",l:"bs",rx:"5x1 @ 83% (215), 3-sec ecc, 45-60s between · BACKOFF 1x2 @ 185",sets:[[215,1],[215,1],[215,1],[215,1],[215,1],[185,2]]},
+   sets:[[170,3,0],[170,3,0],[170,3,0],[170,3,0]]},
+ "2026-09-07":{c:"3-SEC ECCENTRIC on the 215 singles, NORMAL tempo on the 185 backoff. RE-ENTRY to heavy singles, not the confirmation — that moved to 9/14 because travel left her without a measured lift above 180 since Aug 24. Ignore set 1; her first working set runs 5-14% slow. Do the 185 backoff — it proves the reading was load and not fatigue. If these move well, 9/14 goes to 225-230.",w:3,n:"BS clusters — re-entry",l:"bs",rx:"5x1 @ 83% (215), 3-sec ecc, 45-60s between · BACKOFF 1x2 @ 185",sets:[[215,1,3],[215,1,3],[215,1,3],[215,1,3],[215,1,3],[185,2,0]]},
  "2026-09-11":{c:"Back to volume and descent control. 4-sec eccentric. This is the last submax back squat before the confirmation on 9/14 — keep it honest, no heroics.",w:3,n:"BS tempo",l:"bs",rx:"4x3 @ 74% (190), 4-sec eccentric",
-   sets:[[190,3],[190,3],[190,3],[190,3]]},
+   sets:[[190,3,4],[190,3,4],[190,3,4],[190,3,4]]},
  "2026-09-12":{c:"Standard FS volume.",w:3,n:"FS main",l:"fs",rx:"4x3 @ 77% (175), rest 2-3 min",
-   sets:[[175,3],[175,3],[175,3],[175,3]]},
- "2026-09-14":{c:"THE session that settles the max, moved here from 9/7. Five fresh singles at 225. IGNORE SET 1 — judge off rep 1 of set 2 or 3. If that reads 0.42+, 260 is right or conservative; below 0.38, recalculate Wk 5-6. Go to 230 only if 225 reads 0.45+. Do the 185 backoff.",w:4,n:"BS CLUSTERS — confirms the max",l:"bs",key:1,rx:"5x1 @ 86% (225), 3-sec ecc, 45-60s between · BACKOFF 1x2 @ 185",sets:[[225,1],[225,1],[225,1],[225,1],[225,1],[185,2]]},
+   sets:[[175,3,0],[175,3,0],[175,3,0],[175,3,0]]},
+ "2026-09-14":{c:"3-SEC ECCENTRIC on the 225 singles, NORMAL on the backoff. THE session that settles the max, moved here from 9/7. Five fresh singles at 225. IGNORE SET 1 — judge off rep 1 of set 2 or 3. If that reads 0.42+, 260 is right or conservative; below 0.38, recalculate Wk 5-6. Go to 230 only if 225 reads 0.45+. Do the 185 backoff.",w:4,n:"BS CLUSTERS — confirms the max",l:"bs",key:1,rx:"5x1 @ 86% (225), 3-sec ecc, 45-60s between · BACKOFF 1x2 @ 185",sets:[[225,1,3],[225,1,3],[225,1,3],[225,1,3],[225,1,3],[185,2,0]]},
  "2026-09-18":{c:"Doubles now, not triples. 3-sec eccentric.",w:4,n:"BS tempo",l:"bs",rx:"4x2 @ 78% (205), 3-sec eccentric, rest 3 min",
-   sets:[[205,2],[205,2],[205,2],[205,2]]},
+   sets:[[205,2,3],[205,2,3],[205,2,3],[205,2,3]]},
  "2026-09-19":{c:"Heaviest FS volume of the block.",w:4,n:"FS main",l:"fs",rx:"3x3 @ 83% (190), rest 3 min",
-   sets:[[190,3],[190,3],[190,3]]},
+   sets:[[190,3,0],[190,3,0],[190,3,0]]},
  "2026-09-21":{c:"Sets the MVT for the peak. Tick TOP on the 240 sets. Tempo shortens to 2-3 sec — control, not a count. LOG CYCLE PHASE; if she is suppressed this week the number is not her ceiling, and it is better to move the session than accept a bad reading.",w:5,n:"BS clusters — sets MVT",l:"bs",key:1,top:1,
    rx:"4x1 @ 92% (240), 2-3 sec ecc, 60-75s between · BACKOFF 1x2 @ 185",
-   sets:[[240,1],[240,1],[240,1],[240,1],[185,2]]},
+   sets:[[240,1,2],[240,1,2],[240,1,2],[240,1,2],[185,2,0]]},
  "2026-09-25":{c:"Volume is clearly secondary now. Controlled eccentric, no count.",w:5,n:"BS moderate",l:"bs",rx:"3x2 @ 80% (210), controlled ecc, rest 3 min",
-   sets:[[210,2],[210,2],[210,2]]},
+   sets:[[210,2,2],[210,2,2],[210,2,2]]},
  "2026-09-26":{c:"FS staying sharp, not building.",w:5,n:"FS main",l:"fs",rx:"3x2 @ 85% (195), rest 3 min",
-   sets:[[195,2],[195,2],[195,2]]},
- "2026-09-28":{c:"Heaviest lift of the block, 11 days out. Build 225 → 240 → 250, TOP ticked on the 250. Go to 255 ONLY if 250 reads 0.33+ AND the ROM held. This is a CrossFit competition — she needs to arrive fresh, not maximally strong. Bank a clean 250 and taper.",w:6,n:"BS PEAK — heaviest week",l:"bs",key:1,top:1,
+   sets:[[195,2,0],[195,2,0],[195,2,0]]},
+ "2026-09-28":{c:"NORMAL TEMPO throughout — deliberately, so the top single is directly comparable to Aug 3. Heaviest lift of the block, 11 days out. Build 225 → 240 → 250, TOP ticked on the 250. Go to 255 ONLY if 250 reads 0.33+ AND the ROM held. This is a CrossFit competition — she needs to arrive fresh, not maximally strong. Bank a clean 250 and taper.",w:6,n:"BS PEAK — heaviest week",l:"bs",key:1,top:1,
    rx:"Build to 1x1 @ 96% (250), 5+ min between · BACKOFF 2x2 @ 205",
-   sets:[[225,1],[240,1],[250,1],[205,2],[205,2]]},
+   sets:[[225,1,0],[240,1,0],[250,1,0],[205,2,0],[205,2,0]]},
  "2026-10-02":{c:"Taper starts. Fast and crisp, nothing heavy. Should read clearly faster than Monday.",w:6,n:"BS light — taper starts",l:"bs",rx:"3x2 @ 70% (180), max intent, rest 2 min",
-   sets:[[180,2],[180,2],[180,2]]},
+   sets:[[180,2,0],[180,2,0],[180,2,0]]},
  "2026-10-03":{c:"Short. Nothing to prove.",w:6,n:"FS light",l:"fs",rx:"2x2 @ 80% (185), rest 2-3 min",
-   sets:[[185,2],[185,2]]},
+   sets:[[185,2,0],[185,2,0]]},
  "2026-10-05":{c:"A touch, not a test. Stop at the first rep that looks and feels sharp — 215 should read ~0.46 or better. Then three full days off. Trim conditioning too, or the squat taper does nothing.",w:7,n:"FINAL TUNE-UP",l:"bs",rx:"1-2 singles @ 82-85% (215-220) · then FS 1-2 @ 180",
-   sets:[[215,1],[220,1]]}
+   sets:[[215,1,0],[220,1,0]]}
 };
 function realToday(){ var d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10); }
 function isoToday(){
@@ -508,7 +526,7 @@ function paintPlan(){
 }
 
 /* ---------- verdict ---------- */
-function judge(L,v,rom,prior,forceTop){
+function judge(L,v,rom,prior,forceTop,tempo){
   var pct=L/oneRM(), p=predict(L), tone,head,sub;
   var heavySingle = (forceTop || pct>=0.93) && prior.length===0;
   if(heavySingle){
@@ -519,10 +537,16 @@ function judge(L,v,rom,prior,forceTop){
   } else {
     var fast = prior.length ? Math.max.apply(null,prior.map(function(r){return r.v;})) : v;
     var loss = prior.length ? (fast-v)/fast : 0;
-    var c = cutoff(pct);
+    var c = tempo ? 0.25 : cutoff(pct);
     if(prior.length && loss>c){
       tone="red"; head="END THE SET";
-      sub = Math.round(loss*100)+"% down from "+fast.toFixed(2)+" — cutoff is "+Math.round(c*100)+"%";
+      sub = Math.round(loss*100)+"% down from "+fast.toFixed(2)+" — cutoff is "+Math.round(c*100)+"%"
+            + (tempo?" (tempo backstop)":"");
+    } else if(tempo && prior.length){
+      tone = loss>0.18 ? "amber" : "green";
+      head = loss>0.18 ? "STEEP FOR TEMPO" : "NORMAL FOR TEMPO";
+      sub = Math.round(loss*100)+"% down — a "+tempo+"-sec eccentric roughly doubles per-rep decay. "
+            + "Judge the set on rep 1, not this.";
     } else if(v>=p-0.01){ tone="green"; head="ON TREND"; sub="Expected "+p.toFixed(2)+" at this load"; }
     else if(v>=p-0.05){ tone="amber"; head="WORKING HARD"; sub=(p-v).toFixed(2)+" under the "+p.toFixed(2)+" trend"; }
     else { tone="red"; head="BELOW TREND"; sub=(p-v).toFixed(2)+" under "+p.toFixed(2)+" — check load or fatigue"; }
@@ -543,10 +567,10 @@ function buildFromPlan(force){
   if(p && p.sets){
     p.sets.forEach(function(pair){
       var reps=[]; for(var i=0;i<pair[1];i++) reps.push(blankRep());
-      S.sets.push({load:pair[0],reps:reps,top:!!p.top,planned:true});
+      S.sets.push({load:pair[0],reps:reps,top:!!p.top,tempo:pair[2]||0,planned:true});
     });
   } else {
-    S.sets.push({load:S.load,reps:[blankRep(),blankRep(),blankRep()],top:false});
+    S.sets.push({load:S.load,reps:[blankRep(),blankRep(),blankRep()],top:false,tempo:0});
   }
   drawGrid();
 }
@@ -554,7 +578,7 @@ function addSet(){
   var last=S.sets[S.sets.length-1];
   var n=last?last.reps.length:3, load=last?last.load:S.load, reps=[];
   for(var i=0;i<n;i++) reps.push(blankRep());
-  S.sets.push({load:load,reps:reps,top:last?last.top:false});
+  S.sets.push({load:load,reps:reps,top:last?last.top:false,tempo:last?last.tempo:0});
   drawGrid(); stash();
 }
 function addRep(si){ S.sets[si].reps.push(blankRep()); drawGrid(); stash(); }
@@ -572,7 +596,7 @@ function setField(si,ri,f,val){
   recolorSet(si);
   if(f==="v" && !isNaN(n)){
     var prior=S.sets[si].reps.slice(0,ri).filter(function(r){return r.v;});
-    paintLight(n, judge(S.sets[si].load,n,S.sets[si].reps[ri].rom,prior,S.sets[si].top));
+    paintLight(n, judge(S.sets[si].load,n,S.sets[si].reps[ri].rom,prior,S.sets[si].top,S.sets[si].tempo));
   }
   stash();
   document.getElementById("depthWarn").style.display = romFlags()>=2 ? "block":"none";
@@ -587,7 +611,7 @@ function recolorSet(si){
     if(r.v==null){ el.style.background=""; el.style.color="var(--dim)";
       el.style.borderColor="var(--line)"; if(mt) mt.textContent=""; return; }
     var prior=s.reps.slice(0,ri).filter(function(x){return x.v;});
-    var j=judge(s.load,r.v,r.rom,prior,s.top);
+    var j=judge(s.load,r.v,r.rom,prior,s.top,s.tempo);
     el.style.background=TONE[j.tone]; el.style.color="var(--ink)"; el.style.borderColor="transparent";
     if(mt){
       var fast=prior.length?Math.max.apply(null,prior.map(function(x){return x.v;})):r.v;
@@ -603,7 +627,9 @@ function drawGrid(){
   var html="";
   S.sets.forEach(function(s,si){
     html+='<div class="sc" id="sc'+si+'"><div class="sch">'+
-      '<span class="scn">SET '+(si+1)+'</span><span class="scl">'+
+      '<span class="scn">SET '+(si+1)+
+        (s.tempo?' <span class="tmp">'+s.tempo+'s ecc</span>':' <span class="tmpn">normal</span>')+
+        '</span><span class="scl">'+
       '<input type="number" inputmode="numeric" value="'+s.load+'" '+
       'oninput="setLoad('+si+',this.value)"><b>lb</b>'+
       '<label style="display:flex;align-items:center;gap:4px;margin-left:6px;font-size:10px;color:var(--dim)">'+
@@ -714,8 +740,15 @@ function checkReady(){
 }
 function dateChanged(){
   var p=todaysPlan(), dirty=S.sets.some(function(s){return s.reps.some(function(r){return r.v;});});
-  if(p && !dirty){ S.lift=p.l; document.getElementById("lift").value=S.lift; buildFromPlan(true); }
-  paintPlan(); render();
+  if(dirty){
+    if(!confirm("You have reps logged. Load the plan for this date and clear them?")){
+      paintPlan(); render(); return;
+    }
+    S.ready=null; paintLight(0,null);
+  }
+  if(p){ S.lift=p.l; document.getElementById("lift").value=S.lift; }
+  buildFromPlan(true);
+  paintPlan(); render(); stash();
 }
 function setLift(){
   S.lift=document.getElementById("lift").value;
@@ -729,7 +762,7 @@ function buildOut(){
   S.sets.forEach(function(st,i){
     st={load:st.load,top:st.top,reps:st.reps.filter(function(r){return r.v;})};
     if(!st.reps.length) return;
-    L.push("Set "+(i+1)+"  "+st.load+" lb x"+st.reps.length+(st.top?" [top]":"")+"  "+
+    L.push("Set "+(i+1)+"  "+st.load+" lb x"+st.reps.length+(st.top?" [top]":"")+(st.tempo?" ["+st.tempo+"s ecc]":"")+"  "+
       st.reps.map(function(r){
         return r.v.toFixed(2)+(r.rom?"/"+r.rom.toFixed(1)+'"':"")+(r.eai?"/EAI "+r.eai.toFixed(2):"");
       }).join("  "));
@@ -761,7 +794,7 @@ function saveSession(){
     date:d, lift:S.lift, week:p?p.w:"", name:p?p.n:"unscheduled",
     phase:document.getElementById("mens").checked?"menstrual":"",
     ready:S.ready?{v:S.ready.v,d:S.ready.d,head:S.ready.head}:null,
-    sets:S.sets.map(function(s){return {load:s.load,top:s.top,reps:s.reps.filter(function(r){return r.v;})};})
+    sets:S.sets.map(function(s){return {load:s.load,top:s.top,tempo:s.tempo,reps:s.reps.filter(function(r){return r.v;})};})
            .filter(function(s){return s.reps.length;}),
     top:Math.max.apply(null,S.sets.map(function(s){return s.load;})),
     best:Math.max.apply(null,all.map(function(r){return r.v;})),
@@ -785,7 +818,7 @@ function toCSV(){
         rows.push([h.date,lift,h.week,h.name,si+1,ri+1,s.load,
           r.v!=null?r.v.toFixed(2):"", r.pk!=null?r.pk.toFixed(2):"",
           r.rom!=null?r.rom.toFixed(1):"", r.eai!=null?r.eai.toFixed(2):"",
-          h.phase||"", (s.top?"top single":"")+(h.ready&&si===0&&ri===0?
+          h.phase||"", (s.top?"top single":"")+(s.tempo?(s.top?" · ":"")+s.tempo+"s ecc":"")+(h.ready&&si===0&&ri===0?
             (s.top?" · ":"")+"readiness "+h.ready.v.toFixed(2)+" ("+h.ready.head+")":"")]);
       });
     });
