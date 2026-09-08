@@ -423,21 +423,21 @@ var PLAN={
    sets:[[190,3,4],[190,3,4],[190,3,4],[190,3,4]]},
  "2026-09-12":{c:"Standard FS volume.",w:3,n:"FS main",l:"fs",rx:"4x3 @ 77% (175), rest 2-3 min",
    sets:[[175,3,0],[175,3,0],[175,3,0],[175,3,0]]},
- "2026-09-14":{c:"3-SEC ECCENTRIC on the 225 singles, NORMAL on the backoff. THE session that settles the max, moved here from 9/7. Five fresh singles at 225. IGNORE SET 1 — judge off rep 1 of set 2 or 3. If that reads 0.42+, 260 is right or conservative; below 0.38, recalculate Wk 5-6. Go to 230 only if 225 reads 0.45+. Do the 185 backoff.",w:4,n:"BS CLUSTERS — confirms the max",l:"bs",key:1,rx:"5x1 @ 86% (225), 3-sec ecc, 45-60s between · BACKOFF 1x2 @ 185",sets:[[225,1,3],[225,1,3],[225,1,3],[225,1,3],[225,1,3],[185,2,0]]},
+ "2026-09-14":{c:"MEASUREMENT SESSION — keep the volume low so the 240 is fresh. Only 3 singles at 225, rest 2-3 min between them, NOT the 45-60s cluster spacing. IGNORE SINGLE 1 — on 9/7 her best was single 3 and single 1 sat 9% below it. CONTINGENCY: if single 2 or 3 reads 0.48+, rest a FULL 5 minutes, then take one single at 240. If neither clears 0.48, stop at 225 and do the backoff. NORMAL TEMPO throughout, deliberately — the trend line is built from non-tempo reps, so this keeps the reading directly comparable to Aug 3 and to the 9/28 peak. Do the 185 backoff: it is what proves the number was load and not fatigue.",w:4,n:"BS — CONFIRMS THE MAX",l:"bs",key:1,rx:"3x1 @ 87% (225), NORMAL tempo, rest 2-3 min · CONTINGENT 1x1 @ 240 after 5+ min · BACKOFF 1x2 @ 185",sets:[[225,1,0,0],[225,1,0,0],[225,1,0,0],[240,1,0,1],[185,2,0,0]]},
  "2026-09-18":{c:"Doubles now, not triples. 3-sec eccentric.",w:4,n:"BS tempo",l:"bs",rx:"4x2 @ 78% (205), 3-sec eccentric, rest 3 min",
    sets:[[205,2,3],[205,2,3],[205,2,3],[205,2,3]]},
  "2026-09-19":{c:"Heaviest FS volume of the block.",w:4,n:"FS main",l:"fs",rx:"3x3 @ 83% (190), rest 3 min",
    sets:[[190,3,0],[190,3,0],[190,3,0]]},
  "2026-09-21":{c:"Sets the MVT for the peak. Tick TOP on the 240 sets. Tempo shortens to 2-3 sec — control, not a count. LOG CYCLE PHASE; if she is suppressed this week the number is not her ceiling, and it is better to move the session than accept a bad reading.",w:5,n:"BS clusters — sets MVT",l:"bs",key:1,top:1,
    rx:"4x1 @ 92% (240), 2-3 sec ecc, 60-75s between · BACKOFF 1x2 @ 185",
-   sets:[[240,1,2],[240,1,2],[240,1,2],[240,1,2],[185,2,0]]},
+   sets:[[240,1,2,1],[240,1,2,1],[240,1,2,1],[240,1,2,1],[185,2,0,0]]},
  "2026-09-25":{c:"Volume is clearly secondary now. Controlled eccentric, no count.",w:5,n:"BS moderate",l:"bs",rx:"3x2 @ 80% (210), controlled ecc, rest 3 min",
    sets:[[210,2,2],[210,2,2],[210,2,2]]},
  "2026-09-26":{c:"FS staying sharp, not building.",w:5,n:"FS main",l:"fs",rx:"3x2 @ 85% (195), rest 3 min",
    sets:[[195,2,0],[195,2,0],[195,2,0]]},
  "2026-09-28":{c:"NORMAL TEMPO throughout — deliberately, so the top single is directly comparable to Aug 3. Heaviest lift of the block, 11 days out. Build 225 → 240 → 250, TOP ticked on the 250. Go to 255 ONLY if 250 reads 0.33+ AND the ROM held. This is a CrossFit competition — she needs to arrive fresh, not maximally strong. Bank a clean 250 and taper.",w:6,n:"BS PEAK — heaviest week",l:"bs",key:1,top:1,
    rx:"Build to 1x1 @ 96% (250), 5+ min between · BACKOFF 2x2 @ 205",
-   sets:[[225,1,0],[240,1,0],[250,1,0],[205,2,0],[205,2,0]]},
+   sets:[[225,1,0,0],[240,1,0,1],[250,1,0,1],[205,2,0,0],[205,2,0,0]]},
  "2026-10-02":{c:"Taper starts. Fast and crisp, nothing heavy. Should read clearly faster than Monday.",w:6,n:"BS light — taper starts",l:"bs",rx:"3x2 @ 70% (180), max intent, rest 2 min",
    sets:[[180,2,0],[180,2,0],[180,2,0]]},
  "2026-10-03":{c:"Short. Nothing to prove.",w:6,n:"FS light",l:"fs",rx:"2x2 @ 80% (185), rest 2-3 min",
@@ -567,7 +567,7 @@ function buildFromPlan(force){
   if(p && p.sets){
     p.sets.forEach(function(pair){
       var reps=[]; for(var i=0;i<pair[1];i++) reps.push(blankRep());
-      S.sets.push({load:pair[0],reps:reps,top:!!p.top,tempo:pair[2]||0,planned:true});
+      S.sets.push({load:pair[0],reps:reps,top:(pair.length>3?!!pair[3]:!!p.top),tempo:pair[2]||0,planned:true});
     });
   } else {
     S.sets.push({load:S.load,reps:[blankRep(),blankRep(),blankRep()],top:false,tempo:0});
